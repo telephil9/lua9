@@ -1,7 +1,7 @@
 # About
 
 lua9 is a custom version of the [lua](http://lua.org) interpreter including bindings to plan9 libdraw.  
-This relies on the [lua 5.4 port](https://github.com/staalmannen/lua) for plan9 by @staalmannen.
+This relies on the [lua 5.4 port](https://github.com/staalmannen/lua) for plan9 by [staalmannen](https://github.com/staalmannen).
 
 Disclaimer: This is work in progress and is sure to contain bugs.
 
@@ -30,4 +30,4 @@ Install the lua9 interpreter:
 
 # Credits
 
-- Philippe (@telephil9)
+- Philippe ([telephil9](https://github.com/telephil9/))
