@@ -227,6 +227,39 @@ static int l_line(lua_State *L) {
 	return 0;
 }
 
+static int l_ellipse(lua_State *L)
+{
+	Image *dst, *src;
+	Point c, sp;
+	int a, b, thick;
+
+	dst   = l_checkimage(L, 1);
+	c     = l_checkpoint(L, 2);
+	a     = luaL_checkinteger(L, 3);
+	b     = luaL_checkinteger(L, 4);
+	thick = luaL_checkinteger(L, 5);
+	src   = l_checkimage(L, 6);
+	sp    = l_checkpoint(L, 7);
+	ellipse(dst, c, a, b, thick, src, sp);
+	return 0;
+}
+
+static int l_fillellipse(lua_State *L)
+{
+	Image *dst, *src;
+	Point c, sp;
+	int a, b;
+
+	dst   = l_checkimage(L, 1);
+	c     = l_checkpoint(L, 2);
+	a     = luaL_checkinteger(L, 3);
+	b     = luaL_checkinteger(L, 4);
+	src   = l_checkimage(L, 5);
+	sp    = l_checkpoint(L, 6);
+	fillellipse(dst, c, a, b, src, sp);
+	return 0;
+}
+
 static int l_string(lua_State *L) {
 	Image *dst, *src;
 	Font *f;
@@ -383,12 +416,14 @@ static void create_metatable(lua_State *L, const char *name, luaL_Reg *funcs) {
 }
 
 static const struct luaL_Reg drawlib [] = {
-	{ "initdraw", l_initdraw },
-	{ "einit",    l_einit },
-	{ "event",    l_event },
-	{ "draw",     l_draw },
-	{ "line",     l_line },
-	{ "string",   l_string },
+	{ "initdraw",    l_initdraw },
+	{ "einit",       l_einit },
+	{ "event",       l_event },
+	{ "draw",        l_draw },
+	{ "line",        l_line },
+	{ "ellipse",     l_ellipse },
+	{ "fillellipse", l_fillellipse },
+	{ "string",      l_string },
 	{ NULL, NULL }
 };
 
