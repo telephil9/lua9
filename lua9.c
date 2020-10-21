@@ -124,6 +124,20 @@ static Point l_getpoint(lua_State *L, int index)
 	return p;
 }
 
+static Point l_checkpoint(lua_State *L, int index)
+{
+	if(lua_istable(L, index) == 0)
+		luaL_argerror(L, index, "draw: point table expected");
+	return l_getpoint(L, index);
+}
+
+static Point l_optpoint(lua_State *L, int index)
+{
+	if(lua_istable(L, index) == 0)
+		return ZP;
+	return l_getpoint(L, index);
+}
+
 static Rectangle l_getrect(lua_State *L, int index)
 {
 	Rectangle r;
@@ -150,67 +164,82 @@ static Rectangle l_getrect(lua_State *L, int index)
 	return r;
 }
 
-static int l_draw(lua_State *L) {
+static Rectangle l_checkrect(lua_State *L, int index)
+{
+	if(lua_istable(L, index) == 0)
+		luaL_argerror(L, index, "draw: rectangle table expected");
+	return l_getrect(L, index);
+}
+
+static Image* l_checkimage(lua_State *L, int index)
+{
 	ImagePtr *p;
+
+	p = (ImagePtr*)luaL_checkudata(L, index, IMAGE_META);
+	luaL_argcheck(L, p != NULL, index, "draw: Image expected");
+	return p->p;
+}
+
+static Image* l_optimage(lua_State *L, int index)
+{
+	if(lua_isnil(L, index))
+		return nil;
+	return l_checkimage(L, index);
+}
+
+static Font* l_checkfont(lua_State *L, int index)
+{
+	FontPtr *p;
+
+	p = (FontPtr*)luaL_checkudata(L, index, FONT_META);
+	luaL_argcheck(L, p != NULL, index, "draw: Font expected");
+	return p->p;
+}
+
+static int l_draw(lua_State *L) {
 	Image *dst, *src, *mask;
-	Point pt;
+	Point p;
 	Rectangle r;
-	
-	p = (ImagePtr*)luaL_checkudata(L, 1, IMAGE_META);
-	luaL_argcheck(L, p != NULL, 1, "draw: Image expected");
-	dst = p->p;
-	if(lua_istable(L, 2) == 0) {
-		luaL_argerror(L, 2, "draw: table expected");
-	} else {
-		r = l_getrect(L, 2);
-	}
-	p = (ImagePtr*)luaL_checkudata(L, 3, IMAGE_META);
-	luaL_argcheck(L, p != NULL, 3, "draw: Image expected");
-	src = p->p;
-	mask = nil;
-	if(lua_isnil(L, 4) == 0) {
-		p = (ImagePtr*)luaL_checkudata(L, 4, IMAGE_META);
-		luaL_argcheck(L, p != NULL, 4, "draw: Image expected");
-		mask = p->p;
-	}
-	if(lua_istable(L, 5) == 0) {
-		luaL_argerror(L, 2, "draw: table expected");
-	} else {
-		pt = l_getpoint(L, 5);
-	}
-	draw(dst, r, src, mask, pt);
+
+	dst  = l_checkimage(L, 1);
+	r    = l_checkrect(L, 2);
+	src  = l_checkimage(L, 3);
+	mask = l_optimage(L, 4);
+	p    = l_checkpoint(L, 5);
+	draw(dst, r, src, mask, p);
+	return 0;
+}
+
+static int l_line(lua_State *L) {
+	Image *dst, *src;
+	Point p0, p1, sp;
+	int end0, end1, thick;
+
+	dst   = l_checkimage(L, 1);
+	p0    = l_checkpoint(L, 2);
+	p1    = l_checkpoint(L, 3);
+	end0  = luaL_checkinteger(L, 4);
+	end1  = luaL_checkinteger(L, 5);
+	thick = luaL_checkinteger(L, 6);
+	src   = l_checkimage(L, 7);
+	sp    = l_checkpoint(L, 8);
+	line(dst, p0, p1, end0, end1, thick, src, sp);
 	return 0;
 }
 
 static int l_string(lua_State *L) {
-	ImagePtr *p;
-	FontPtr *fp;
 	Image *dst, *src;
 	Font *f;
-	Point pt, spt;
+	Point p, sp;
 	const char *s;
 
-	p = (ImagePtr*)luaL_checkudata(L, 1, IMAGE_META);
-	luaL_argcheck(L, p != NULL, 1, "draw: Image expected");
-	dst = p->p;
-	if(lua_istable(L, 2)) {
-		pt = l_getpoint(L, 2);
-	} else {
-		luaL_argerror(L, 2, "draw: table expected");
-	}
-	p = (ImagePtr*)luaL_checkudata(L, 3, IMAGE_META);
-	luaL_argcheck(L, p != NULL, 3, "draw: Image expected");
-	src = p->p;
-	if(lua_istable(L, 4)) {
-		spt = l_getpoint(L, 4);
-	} else {
-		spt = ZP;
-	}
-	fp = (FontPtr*)luaL_checkudata(L, 5, FONT_META);
-	luaL_argcheck(L, fp != NULL, 5, "draw: Font expected");
-	f = fp->p;
-	s = luaL_checkstring(L, 6);
-	string(dst, pt, src, spt, f, s);
+	dst = l_checkimage(L, 1);
+	p   = l_checkpoint(L, 2);
+	src = l_checkimage(L, 3);
+	sp  = l_optpoint(L, 4);
+	f   = l_checkfont(L, 5);
+	s   = luaL_checkstring(L, 6);
+	string(dst, p, src, sp, f, s);
 	return 0;
 }
 
@@ -358,9 +387,16 @@ static const struct luaL_Reg drawlib [] = {
 	{ "einit",    l_einit },
 	{ "event",    l_event },
 	{ "draw",     l_draw },
+	{ "line",     l_line },
 	{ "string",   l_string },
 	{ NULL, NULL }
 };
+
+static void l_pushglobal(lua_State *L, const char *name, int value, int index)
+{
+	lua_pushnumber(L, value);
+	lua_setfield(L, index, name);	
+}
 
 int luaopen_drawlib (lua_State *L) {
 	create_metatable(L, IMAGE_META, image_funcs);
@@ -371,6 +407,11 @@ int luaopen_drawlib (lua_State *L) {
 	lua_setfield(L, -2, "Emouse");
 	lua_pushnumber(L, Ekeyboard);
 	lua_setfield(L, -2, "Ekeyboard");
+	l_pushglobal(L, "Endsquare", Endsquare, -2);
+	l_pushglobal(L, "Enddisc", Enddisc, -2);
+	l_pushglobal(L, "Endarrow", Endarrow, -2);
+	l_pushglobal(L, "Endmask", Endmask, -2);
+
 	return 1;
 }
 
