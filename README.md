@@ -25,8 +25,7 @@ Install the lua9 interpreter:
 ```sh
 % ape/lua9 <script.lua>
 ```
-
-**Note:** shebang scripts do not currently work.
+It is also possible to use a shebang script.
 
 # Credits
 
