@@ -301,32 +301,43 @@ static int l_image_tostring(lua_State *L) {
 	return 1;
 }
 
-static int l_image_index(lua_State *L) {
-	ImagePtr *i;
-	const char *s;
-	Rectangle r;
+static void l_pushrect(lua_State *L, Rectangle r)
+{
+	lua_newtable(L);
+	lua_newtable(L);
+	lua_pushinteger(L, r.min.x);
+	lua_setfield(L, -2, "x");
+	lua_pushinteger(L, r.min.y);
+	lua_setfield(L, -2, "y");
+	lua_setfield(L, -2, "min");
+	lua_newtable(L);
+	lua_pushinteger(L, r.max.x);
+	lua_setfield(L, -2, "x");
+	lua_pushinteger(L, r.max.y);
+	lua_setfield(L, -2, "y");
+	lua_setfield(L, -2, "max");
+}
 
-	i = (ImagePtr*)luaL_checkudata(L, 1, IMAGE_META);
-	luaL_argcheck(L, i != NULL, 1, "draw: Image expected");
+static int l_image_index(lua_State *L) {
+	Image *i;
+	const char *s;
+
+	i = l_checkimage(L, 1);
 	s = luaL_checkstring(L, 2);
 	if(!strncmp(s, "r", 1)) {
-		r = i->p->r;
-		lua_newtable(L);
-		lua_newtable(L);
-		lua_pushinteger(L, r.min.x);
-		lua_setfield(L, -2, "x");
-		lua_pushinteger(L, r.min.y);
-		lua_setfield(L, -2, "y");
-		lua_setfield(L, -2, "min");
-		lua_newtable(L);
-		lua_pushinteger(L, r.max.x);
-		lua_setfield(L, -2, "x");
-		lua_pushinteger(L, r.max.y);
-		lua_setfield(L, -2, "y");
-		lua_setfield(L, -2, "max");
-		return 1;
+		l_pushrect(L, i->r);
+	} else if(!strncmp(s, "clipr", 5)) {
+		l_pushrect(L, i->clipr);
+	} else if(!strncmp(s, "chan", 4)) {
+		lua_pushinteger(L, i->chan);
+	} else if(!strncmp(s, "depth", 5)) {
+		lua_pushinteger(L, i->depth);
+	} else if(!strncmp(s, "repl", 4)) {
+		lua_pushinteger(L, i->repl);
+	} else {
+		return 0;
 	}
-	return 0;
+	return 1;
 }
 
 static const struct luaL_Reg image_funcs[] = {
