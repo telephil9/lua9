@@ -32,6 +32,16 @@ struct FontPtr {
 static lua_State *state;
 static int ridx, tidx;
 
+static ImagePtr* to_image(lua_State *L, Image *img) {
+	ImagePtr *i;
+
+	i = (ImagePtr*)lua_newuserdata(L, sizeof(ImagePtr));
+	luaL_getmetatable(L, IMAGE_META);
+	lua_setmetatable(L, -2);
+	i->p = img;
+	return i;
+}
+
 void eresized(int new) {
 	if(new && getwindow(display, Refnone) < 0){
 		fprintf(stderr, "cannot reattach to window: %r");
@@ -196,6 +206,15 @@ static Font* l_checkfont(lua_State *L, int index)
 	return p->p;
 }
 
+static Display* l_checkdisplay(lua_State *L, int index)
+{
+	DisplayPtr *p;
+
+	p = (DisplayPtr*)luaL_checkudata(L, index, DISPLAY_META);
+	luaL_argcheck(L, p!=NULL, index, "draw: Display expected");
+	return p->p;
+}
+
 static int l_draw(lua_State *L) {
 	Image *dst, *src, *mask;
 	Point p;
@@ -274,6 +293,24 @@ static int l_string(lua_State *L) {
 	s   = luaL_checkstring(L, 6);
 	string(dst, p, src, sp, f, s);
 	return 0;
+}
+
+static int l_allocimage(lua_State *L)
+{
+	Display *d;
+	Rectangle r;
+	ulong chan, col;
+	int repl;
+	Image *i;
+
+	d    = l_checkdisplay(L, 1);
+	r    = l_checkrect(L, 2);
+	chan = (ulong)luaL_checkinteger(L, 3);
+	repl = luaL_checkinteger(L, 4);
+	col  = (ulong)luaL_checkinteger(L, 5);
+	i    = allocimage(d, r, chan, repl, col);
+	to_image(L, i);
+	return 1;
 }
 
 /* Image metatable */
@@ -363,16 +400,6 @@ static int l_display_tostring(lua_State *L) {
 	return 1;
 }
 
-static ImagePtr* to_image(lua_State *L, Image *img) {
-	ImagePtr *i;
-
-	i = (ImagePtr*)lua_newuserdata(L, sizeof(ImagePtr));
-	luaL_getmetatable(L, IMAGE_META);
-	lua_setmetatable(L, -2);
-	i->p = img;
-	return i;
-}
-
 static int l_display_index(lua_State *L) {
 	DisplayPtr *d;
 	const char *s;
@@ -435,6 +462,7 @@ static const struct luaL_Reg drawlib [] = {
 	{ "ellipse",     l_ellipse },
 	{ "fillellipse", l_fillellipse },
 	{ "string",      l_string },
+	{ "allocimage",  l_allocimage },
 	{ NULL, NULL }
 };
 
