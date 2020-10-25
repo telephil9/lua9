@@ -43,9 +43,56 @@ levent(lua_State *L)
 	return 2;
 }
 
+static int
+lkbd(lua_State *L)
+{
+	int r;
+
+	r = ekbd();
+	lua_pushinteger(L, r);
+	return 1;
+}
+
+static int
+lcanmouse(lua_State *L)
+{
+	int b;
+
+	b = ecanmouse();
+	lua_pushboolean(L, b);
+	return 1;
+}
+
+static int
+lcankbd(lua_State *L)
+{
+	int b;
+
+	b = ecankbd();
+	lua_pushboolean(L, b);
+	return 1;
+}
+
+static int
+ltimer(lua_State *L)
+{
+	ulong key, r;
+	int n;
+
+	key = (ulong)luaL_checkinteger(L, 1);
+	n   = luaL_checkinteger(L, 2);
+	r   = etimer(key, n);
+	lua_pushinteger(L, r);
+	return 1;
+}
+
 static const struct luaL_Reg libevent [] = {
-	{ "init",       leinit },
-	{ "event",       levent },
+	{ "init",      leinit },
+	{ "event",     levent },
+	{ "kbd",       lkbd },
+	{ "canmouse",  lcanmouse },
+	{ "cankbd",    lcankbd },
+	{ "timer",     ltimer },
 	{ NULL, NULL }
 };
 
