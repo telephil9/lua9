@@ -11,6 +11,26 @@
 #include "ldraw.h"
 #include "utils.h"
 
+static Mouse
+checkmouse(lua_State *L, int index)
+{
+	Mouse m;
+
+	if(lua_istable(L, index) == 0)
+		luaL_argerror(L, index, "mouse table expected");
+	lua_pushstring(L, "buttons");
+	lua_gettable(L, index);
+	m.buttons = luaL_checkinteger(L, -1);
+	lua_pushstring(L, "xy");
+	lua_gettable(L, index);
+	m.xy = checkpoint(L, lua_gettop(L));
+	lua_pushstring(L, "msec");
+	lua_gettable(L, index);
+	m.msec = luaL_checkinteger(L, -1);
+	lua_pop(L, 3); /* msec, xy, buttons */
+	return m;
+}
+
 static int
 leinit(lua_State *L)
 {
@@ -86,6 +106,27 @@ ltimer(lua_State *L)
 	return 1;
 }
 
+static int
+lenter(lua_State *L)
+{
+	char buf[1024]; /* XXX do it better */
+	char *ask, *s;
+	Mouse m;
+	int n;
+
+	ask = luaL_optstring(L, 1, nil);
+	s   = luaL_optstring(L, 2, "");
+	m   = checkmouse(L, 3);
+	if(s != nil)
+		strncpy(buf, s, sizeof buf);
+	n   = eenter(ask, buf, sizeof buf, &m);
+	if(n > 0)
+		lua_pushlstring(L, buf, n);
+	else
+		lua_pushnil(L);
+	return 1;
+}	
+
 static const struct luaL_Reg libevent [] = {
 	{ "init",      leinit },
 	{ "event",     levent },
@@ -93,6 +134,7 @@ static const struct luaL_Reg libevent [] = {
 	{ "canmouse",  lcanmouse },
 	{ "cankbd",    lcankbd },
 	{ "timer",     ltimer },
+	{ "enter",     lenter },
 	{ NULL, NULL }
 };
 
