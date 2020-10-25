@@ -6,13 +6,17 @@ TARG=lua9
 BIN=/$objtype/bin/ape
 
 OFILES=\
-    lua9.$O \
-    
+	display.$O \
+	font.$O \
+	image.$O \
+	geometry.$O \
+	key.$O \
+	utils.$O \
+	lua9.$O
+
 HFILES=\
-    /sys/include/ape/lauxlib.h \
-    /sys/include/ape/lua.h \
-    /sys/include/ape/luaconf.h \
-    /sys/include/ape/lualib.h
+	ldraw.h \
+	utils.h
 
 </sys/src/cmd/mkone
 

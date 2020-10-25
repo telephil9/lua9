@@ -1,21 +1,23 @@
 # About
 
 lua9 is a custom version of the [lua](http://lua.org) interpreter including bindings to plan9 libdraw.  
-This relies on the [lua 5.4 port](https://github.com/staalmannen/lua) for plan9 by [staalmannen](https://github.com/staalmannen).
 
-Disclaimer: This is work in progress and is sure to contain bugs.
+__Disclaimer:__ This is work in progress and is sure to contain bugs.
 
 # Installation
 
-First, install the lua 5.4 port for plan9.  
+Make sure to have [git9](http://github.com/oridb/git9] installed first.
 
-Clone the sources using the [git9](https://github.com/oridb/git9) client:
+Install the [lua 5.4 port](https://github.com/staalmannen/lua) for plan9 by [staalmannen](https://github.com/staalmannen).  
 ```sh
-% git/clone git://github.com/telephil9/lua9
+% git/clone git://github.com/staalmannen/lua
+% cd lua
+% mk install
 ```
 
-Install the lua9 interpreter:
+Install lua9:  
 ```sh
+% git/clone git://github.com/telephil9/lua9
 % cd lua9
 % mk install
 ```
@@ -25,8 +27,10 @@ Install the lua9 interpreter:
 ```sh
 % ape/lua9 <script.lua>
 ```
-It is also possible to use a shebang script.
 
-# Credits
+You can also start your lua script with `#!/bin/ape/lua9`.
 
-- Philippe ([telephil9](https://github.com/telephil9/))
+# Documentation
+
+TODO
+

@@ -31,7 +31,7 @@ while true do
 	if e == draw.Emouse then
 		--print 'Mouse event'
 	elseif e == draw.Ekeyboard then
-		if string.char(ev.kbdc) == 'q' then
+		if key.eq(ev.kbdc, 'q') or ev.kbdc == key.DEL then
 			os.exit()
 		end
 	end
