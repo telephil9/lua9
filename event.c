@@ -106,6 +106,43 @@ ltimer(lua_State *L)
 	return 1;
 }
 
+static char**
+checkstrings(lua_State *L, int index)
+{
+	char **items;
+	int n, i;
+
+	if(lua_istable(L, index) == 0)
+		luaL_argerror(L, index, "table of strings expected");
+	n = luaL_len(L, index);
+	if(n == 0)
+		luaL_argerror(L, index, "table of strings is empty");
+	items = calloc(n + 1, sizeof(char*));
+	if(items == nil)
+		luaL_error(L, "out of memory");
+	items[n] = NULL;
+	for(i = 0; i < n; i++){
+		lua_rawgeti(L, index, i + 1);
+		items[i] = luaL_checkstring(L, lua_gettop(L));
+	}
+	return items;
+}
+
+static int
+lmenuhit(lua_State *L)
+{
+	int b, r;
+	Mouse m;
+	Menu menu;
+
+	b = luaL_checkinteger(L, 1);
+	m = checkmouse(L, 2);
+	menu.item = checkstrings(L, 3);
+	r = emenuhit(b, &m, &menu);
+	lua_pushinteger(L, r);
+	return 1;
+}
+
 static int
 lenter(lua_State *L)
 {
@@ -135,6 +172,7 @@ static const struct luaL_Reg libevent [] = {
 	{ "cankbd",    lcankbd },
 	{ "timer",     ltimer },
 	{ "enter",     lenter },
+	{ "menuhit",   lmenuhit },
 	{ NULL, NULL }
 };
 
