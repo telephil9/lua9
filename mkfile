@@ -10,6 +10,7 @@ OFILES=\
 	font.$O \
 	image.$O \
 	geometry.$O \
+	event.$O \
 	key.$O \
 	color.$O \
 	utils.$O \

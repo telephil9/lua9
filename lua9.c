@@ -58,30 +58,6 @@ linitdraw(lua_State *L)
 }
 
 static int
-leinit(lua_State *L)
-{
-	lua_Integer i;
-
-	i = luaL_checknumber(L, -1);
-	einit((ulong)i);
-	return 0;
-}
-
-static int
-levent(lua_State *L)
-{
-	Event ev;
-	int e;
-
-	e = event(&ev);
-	lua_pushnumber(L, e);
-	lua_newtable(L);
-	lua_pushinteger(L, ev.kbdc);
-	lua_setfield(L, -2, "kbdc");
-	return 2;
-}
-
-static int
 ldraw(lua_State *L)
 {
 	Image *dst, *src, *mask;
@@ -191,8 +167,6 @@ lallocimage(lua_State *L)
 
 static const struct luaL_Reg libdraw [] = {
 	{ "initdraw",    linitdraw },
-	{ "einit",       leinit },
-	{ "event",       levent },
 	{ "draw",        ldraw },
 	{ "line",        lline },
 	{ "ellipse",     lellipse },
@@ -209,8 +183,6 @@ openlibdraw(lua_State *L)
 	registerimagemeta(L);
 	registerfontmeta(L);
 	luaL_newlib(L, libdraw);
-	pushglobal(L, "Emouse", Emouse);
-	pushglobal(L, "Ekeyboard", Ekeyboard);
 	pushglobal(L, "END_SQUARE", Endsquare);
 	pushglobal(L, "END_DISC", Enddisc);
 	pushglobal(L, "END_ARROW", Endarrow);
@@ -221,6 +193,7 @@ openlibdraw(lua_State *L)
 
 static const luaL_Reg libs[] = {
 	{ "draw", openlibdraw },
+	{ "event", openlibevent },
 	{ "key",  openlibkey },
 	{ "color", openlibcolor },
 	{ NULL, NULL },

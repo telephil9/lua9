@@ -23,14 +23,14 @@ function eresized()
 end
 
 draw.initdraw('lua sample')
-draw.einit(draw.Emouse|draw.Ekeyboard)
+event.init(event.MOUSE|event.KEYBOARD)
 red = draw.allocimage(display, rect(0,0,1,1), screen.chan, 1, color.RED)
 eresized()
 while true do
-	local e, ev = draw.event()
-	if e == draw.Emouse then
+	local e, ev = event.event()
+	if e == event.MOUSE then
 		--print 'Mouse event'
-	elseif e == draw.Ekeyboard then
+	elseif e == event.KEYBOARD then
 		if key.eq(ev.kbdc, 'q') or ev.kbdc == key.DEL then
 			os.exit()
 		end
