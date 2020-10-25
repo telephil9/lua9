@@ -24,7 +24,7 @@ end
 
 draw.initdraw('lua sample')
 draw.einit(draw.Emouse|draw.Ekeyboard)
-red = draw.allocimage(display, rect(0,0,1,1), screen.chan, 1, 0xFF0000FF)
+red = draw.allocimage(display, rect(0,0,1,1), screen.chan, 1, color.RED)
 eresized()
 while true do
 	local e, ev = draw.event()

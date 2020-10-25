@@ -11,6 +11,7 @@ OFILES=\
 	image.$O \
 	geometry.$O \
 	key.$O \
+	color.$O \
 	utils.$O \
 	lua9.$O
 

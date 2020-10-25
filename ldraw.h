@@ -28,5 +28,6 @@ Point optpoint(lua_State *L, int index);
 /* libs */
 int openlibdraw(lua_State *L);
 int openlibkey(lua_State *L);
+int openlibcolor(lua_State *L);
 
 #endif

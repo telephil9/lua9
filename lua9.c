@@ -222,6 +222,7 @@ openlibdraw(lua_State *L)
 static const luaL_Reg libs[] = {
 	{ "draw", openlibdraw },
 	{ "key",  openlibkey },
+	{ "color", openlibcolor },
 	{ NULL, NULL },
 };
 
