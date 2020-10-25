@@ -211,10 +211,10 @@ openlibdraw(lua_State *L)
 	luaL_newlib(L, libdraw);
 	pushglobal(L, "Emouse", Emouse);
 	pushglobal(L, "Ekeyboard", Ekeyboard);
-	pushglobal(L, "Endsquare", Endsquare);
-	pushglobal(L, "Enddisc", Enddisc);
-	pushglobal(L, "Endarrow", Endarrow);
-	pushglobal(L, "Endmask", Endmask);
+	pushglobal(L, "END_SQUARE", Endsquare);
+	pushglobal(L, "END_DISC", Enddisc);
+	pushglobal(L, "END_ARROW", Endarrow);
+	pushglobal(L, "END_MASK", Endmask);
 
 	return 1;
 }

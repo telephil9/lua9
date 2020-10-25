@@ -17,7 +17,7 @@ function eresized()
 	draw.draw(screen, screen.r, display.white, nil, ZP)
 	draw.draw(screen, rect(50, 150, 100, 200), display.black, nil, ZP)
 	draw.string(screen, pt(110, 160), display.black, nil, font, 'Hello LUA')
-	draw.line(screen, pt(50, 210), pt(150, 210), draw.Endsquare, draw.Endarrow, 1, display.black, ZP)
+	draw.line(screen, pt(50, 210), pt(150, 210), draw.END_DISC, draw.END_ARROW, 1, display.black, ZP)
 	draw.ellipse(screen, pt(300, 300), 200, 100, 2, display.black, ZP)
 	draw.fillellipse(screen, pt(300, 300), 20, 50, red, ZP)
 end
