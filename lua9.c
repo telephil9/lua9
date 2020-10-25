@@ -24,7 +24,7 @@ main(int argc, char *argv[])
 {
 	lua_State *L;
 	luaL_Reg *lib;
-	char *f = NULL;
+	char *s;
 	int r;
 
 	L = luaL_newstate();
@@ -34,6 +34,10 @@ main(int argc, char *argv[])
 		lua_pop(L, 1);
 	}
 	r = luaL_dofile(L, argc > 1 ? argv[1] : NULL);
+	if(r != LUA_OK){
+		s = luaL_checkstring(L, lua_gettop(L));
+		fprintf(stderr, "error: %s\n", s);
+	}
 	lua_close(L);
-	return f == LUA_OK;
+	return r == LUA_OK;
 }
