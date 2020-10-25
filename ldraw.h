@@ -24,6 +24,7 @@ void pushpoint(lua_State *L, Point p);
 Point checkpoint(lua_State *L, int index);
 Point getpoint(lua_State *L, int index);
 Point optpoint(lua_State *L, int index);
+Point* checkpoints(lua_State *L, int index, int *np);
 
 /* libs */
 int openlibdraw(lua_State *L);

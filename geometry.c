@@ -1,4 +1,5 @@
 #include <draw.h>
+#include <stdlib.h>
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
@@ -88,4 +89,25 @@ optpoint(lua_State *L, int index)
 	if(lua_istable(L, index) == 0)
 		return ZP;
 	return getpoint(L, index);
+}
+
+Point*
+checkpoints(lua_State *L, int index, int *np)
+{
+	Point *p;
+	int i;
+
+	if(lua_istable(L, index) == 0)
+		luaL_argerror(L, index, "table of points expected");
+	*np = luaL_len(L, index);
+	if(*np == 0)
+		luaL_argerror(L, index, "table of points is empty");
+	p = calloc(*np, sizeof(Point));
+	if(p == nil)
+		luaL_error(L, "out of memory");
+	for(i = 1; i <= *np; i++){
+		lua_rawgeti(L, index, i);
+		p[i-1] = checkpoint(L, lua_gettop(L));
+	}
+	return p;
 }
