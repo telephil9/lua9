@@ -166,7 +166,7 @@ lallocimage(lua_State *L)
 }
 
 static const struct luaL_Reg libdraw [] = {
-	{ "initdraw",    linitdraw },
+	{ "init",        linitdraw },
 	{ "draw",        ldraw },
 	{ "line",        lline },
 	{ "ellipse",     lellipse },

@@ -22,7 +22,7 @@ function eresized()
 	draw.fillellipse(screen, pt(300, 300), 20, 50, red, ZP)
 end
 
-draw.initdraw('lua sample')
+draw.init('lua sample')
 event.init(event.MOUSE|event.KEYBOARD)
 red = draw.allocimage(display, rect(0,0,1,1), screen.chan, 1, color.RED)
 eresized()
