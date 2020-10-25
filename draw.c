@@ -133,6 +133,40 @@ lline(lua_State *L)
 }
 
 static int
+lpoly(lua_State *L)
+{
+	Image *dst, *src;
+	Point *p, sp;
+	int np, end0, end1, radius;
+
+	dst    = checkimage(L, 1);
+	p      = checkpoints(L, 2, &np);
+	end0   = luaL_checkinteger(L, 3);
+	end1   = luaL_checkinteger(L, 4);
+	radius = luaL_checkinteger(L, 5);
+	src    = checkimage(L, 6);
+	sp     = checkpoint(L, 7);
+	poly(dst, p, np, end0, end1, radius, src, sp);
+	return 0;
+}
+
+static int
+lfillpoly(lua_State *L)
+{
+	Image *dst, *src;
+	Point *p, sp;
+	int np, wind;
+
+	dst  = checkimage(L, 1);
+	p    = checkpoints(L, 2, &np);
+	wind = luaL_checkinteger(L, 3);
+	src  = checkimage(L, 4);
+	sp   = checkpoint(L, 5);
+	fillpoly(dst, p, np, wind, src, sp);
+	return 0;
+}
+
+static int
 lbezier(lua_State *L)
 {
 	Image *dst, *src;
@@ -170,6 +204,42 @@ lfillbezier(lua_State *L)
 	src    = checkimage(L, 7);
 	sp     = checkpoint(L, 8);
 	ret    = fillbezier(dst, p0, p1, p2, p3, w, src, sp);
+	lua_pushinteger(L, ret);
+	return 1;
+}
+
+static int
+lbezspline(lua_State *L)
+{
+	Image *dst, *src;
+	Point *p, sp;
+	int ret, np, end0, end1, radius;
+
+	dst    = checkimage(L, 1);
+	p      = checkpoints(L, 2, &np);
+	end0   = luaL_checkinteger(L, 3);
+	end1   = luaL_checkinteger(L, 4);
+	radius = luaL_checkinteger(L, 5);
+	src    = checkimage(L, 6);
+	sp     = checkpoint(L, 7);
+	ret    = bezspline(dst, p, np, end0, end1, radius, src, sp);
+	lua_pushinteger(L, ret);
+	return 1;
+}
+
+static int
+lfillbezspline(lua_State *L)
+{
+	Image *dst, *src;
+	Point *p, sp;
+	int ret, np, w;
+
+	dst = checkimage(L, 1);
+	p   = checkpoints(L, 2, &np);
+	w   = luaL_checkinteger(L, 3);
+	src = checkimage(L, 4);
+	sp  = checkpoint(L, 5);
+	ret = fillbezspline(dst, p, np, w, src, sp);
 	lua_pushinteger(L, ret);
 	return 1;
 }
@@ -310,6 +380,71 @@ lstring(lua_State *L)
 }
 
 static int
+lstringn(lua_State *L)
+{
+	Image *dst, *src;
+	Point p, sp, rp;
+	Font *f;
+	char *s;
+	int len;
+
+	dst = checkimage(L, 1);
+	p   = checkpoint(L, 2);
+	src = checkimage(L, 3);
+	sp  = checkpoint(L, 4);
+	f   = checkfont(L, 5);
+	s   = luaL_checkstring(L, 6);
+	len = luaL_checkinteger(L, 7);
+	rp  = stringn(dst, p, src, sp, f, s, len);
+	pushpoint(L, rp);
+	return 1;
+}
+
+static int
+lstringbg(lua_State *L)
+{
+	Image *dst, *src, *bg;
+	Font *f;
+	Point p, sp, bgp, r;
+	const char *s;
+
+	dst = checkimage(L, 1);
+	p   = checkpoint(L, 2);
+	src = checkimage(L, 3);
+	sp  = optpoint(L, 4);
+	f   = checkfont(L, 5);
+	s   = luaL_checkstring(L, 6);
+	bg  = checkimage(L, 7);
+	bgp = checkpoint(L, 8);
+	r   = stringbg(dst, p, src, sp, f, s, bg, bgp);
+	pushpoint(L, r);
+	return 1;
+}
+
+static int
+lstringnbg(lua_State *L)
+{
+	Image *dst, *src, *bg;
+	Point p, sp, bgp, rp;
+	Font *f;
+	char *s;
+	int len;
+
+	dst = checkimage(L, 1);
+	p   = checkpoint(L, 2);
+	src = checkimage(L, 3);
+	sp  = checkpoint(L, 4);
+	f   = checkfont(L, 5);
+	s   = luaL_checkstring(L, 6);
+	len = luaL_checkinteger(L, 7);
+	bg  = checkimage(L, 8);
+	bgp = checkpoint(L, 9);
+	rp  = stringnbg(dst, p, src, sp, f, s, len, bg, bgp);
+	pushpoint(L, rp);
+	return 1;
+}
+	
+static int
 lallocimage(lua_State *L)
 {
 	Display *d;
@@ -350,8 +485,12 @@ static const struct luaL_Reg libdraw [] = {
 	{ "repl",        lrepl },
 	{ "replclipr",   lreplclipr },
 	{ "line",        lline },
+	{ "poly",        lpoly },
+	{ "fillpoly",    lfillpoly },
 	{ "bezier",      lbezier },
 	{ "fillbezier",  lfillbezier },
+	{ "bezspline",   lbezspline },
+	{ "fillbezspline", lfillbezspline },
 	{ "ellipse",     lellipse },
 	{ "fillellipse", lfillellipse },
 	{ "arc",         larc },
@@ -360,6 +499,9 @@ static const struct luaL_Reg libdraw [] = {
 	{ "icossin2",    licossin2 },
 	{ "border",      lborder },
 	{ "string",      lstring },
+	{ "stringn",     lstringn },
+	{ "stringbg",    lstringbg },
+	{ "stringnbg",   lstringnbg },
 	{ "allocimage",  lallocimage },
 	{ "allocimagemix", lallocimagemix },
 	{ NULL, NULL }
