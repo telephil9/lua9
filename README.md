@@ -6,7 +6,7 @@ __Disclaimer:__ This is work in progress and is sure to contain bugs.
 
 # Installation
 
-Make sure to have [git9](http://github.com/oridb/git9] installed first.
+Make sure to have [git9](http://github.com/oridb/git9) installed first.
 
 Install the [lua 5.4 port](https://github.com/staalmannen/lua) for plan9 by [staalmannen](https://github.com/staalmannen).  
 ```sh
@@ -28,7 +28,7 @@ Install lua9:
 % ape/lua9 <script.lua>
 ```
 
-You can also start your lua script with `#!/bin/ape/lua9`.
+You can also start your lua script with `#!/bin/ape/lua9` on the first line.
 
 # Documentation
 
