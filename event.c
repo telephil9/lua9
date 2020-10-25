@@ -32,6 +32,14 @@ levent(lua_State *L)
 	lua_newtable(L);
 	lua_pushinteger(L, ev.kbdc);
 	lua_setfield(L, -2, "kbdc");
+	lua_newtable(L);
+	lua_pushinteger(L, ev.mouse.buttons);
+	lua_setfield(L, -2, "buttons");
+	pushpoint(L, ev.mouse.xy);
+	lua_setfield(L, -2, "xy");
+	lua_pushinteger(L, ev.mouse.msec);
+	lua_setfield(L, -2, "msec");
+	lua_setfield(L, -2, "mouse");
 	return 2;
 }
 
