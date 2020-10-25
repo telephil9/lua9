@@ -74,6 +74,46 @@ ldraw(lua_State *L)
 }
 
 static int
+lreplxy(lua_State *L)
+{
+	int m, M, x, r;
+
+	m = luaL_checkinteger(L, 1);
+	M = luaL_checkinteger(L, 2);
+	x = luaL_checkinteger(L, 3);
+	r = drawreplxy(m, M, x);
+	lua_pushinteger(L, r);
+	return 1;
+}
+
+static int
+lrepl(lua_State *L)
+{
+	Rectangle r;
+	Point p, rp;
+
+	r  = checkrect(L, 1);
+	p  = checkpoint(L, 2);
+	rp = drawrepl(r, p);
+	pushpoint(L, rp);
+	return 1;
+}
+
+static int
+lreplclipr(lua_State *L)
+{
+	Image *i;
+	int repl;
+	Rectangle clipr;
+
+	i     = checkimage(L, 1);
+	repl  = luaL_checkinteger(L, 2);
+	clipr = checkrect(L, 3);
+	replclipr(i, repl, clipr);
+	return 0;
+}
+
+static int
 lline(lua_State *L)
 {
 	Image *dst, *src;
@@ -90,6 +130,48 @@ lline(lua_State *L)
 	sp    = checkpoint(L, 8);
 	line(dst, p0, p1, end0, end1, thick, src, sp);
 	return 0;
+}
+
+static int
+lbezier(lua_State *L)
+{
+	Image *dst, *src;
+	Point p0, p1, p2, p3, sp;
+	int end0, end1, radius, ret;
+
+	dst    = checkimage(L, 1);
+	p0     = checkpoint(L, 2);
+	p1     = checkpoint(L, 3);
+	p2     = checkpoint(L, 4);
+	p3     = checkpoint(L, 5);
+	end0   = luaL_checkinteger(L, 6);
+	end1   = luaL_checkinteger(L, 7);
+	radius = luaL_checkinteger(L, 8);
+	src    = checkimage(L, 9);
+	sp     = checkpoint(L, 10);
+	ret    = bezier(dst, p0, p1, p2, p3, end0, end1, radius, src, sp);
+	lua_pushinteger(L, ret);
+	return 1;
+}
+
+static int
+lfillbezier(lua_State *L)
+{
+	Image *dst, *src;
+	Point p0, p1, p2, p3, sp;
+	int w, ret;
+
+	dst    = checkimage(L, 1);
+	p0     = checkpoint(L, 2);
+	p1     = checkpoint(L, 3);
+	p2     = checkpoint(L, 4);
+	p3     = checkpoint(L, 5);
+	w      = luaL_checkinteger(L, 6);
+	src    = checkimage(L, 7);
+	sp     = checkpoint(L, 8);
+	ret    = fillbezier(dst, p0, p1, p2, p3, w, src, sp);
+	lua_pushinteger(L, ret);
+	return 1;
 }
 
 static int
@@ -124,6 +206,87 @@ lfillellipse(lua_State *L)
 	src   = checkimage(L, 5);
 	sp    = checkpoint(L, 6);
 	fillellipse(dst, c, a, b, src, sp);
+	return 0;
+}
+
+static int
+larc(lua_State *L)
+{
+	Image *dst, *src;
+	Point c, sp;
+	int a, b, thick, alpha, phi;
+
+	dst   = checkimage(L, 1);
+	c     = checkpoint(L, 2);
+	a     = luaL_checkinteger(L, 3);
+	b     = luaL_checkinteger(L, 4);
+	thick = luaL_checkinteger(L, 5);
+	src   = checkimage(L, 6);
+	sp    = checkpoint(L, 7);
+	alpha = luaL_checkinteger(L, 8);
+	phi   = luaL_checkinteger(L, 9);
+	arc(dst, c, a, b, thick, src, sp, alpha, phi);
+	return 0;
+}
+
+static int
+lfillarc(lua_State *L)
+{
+	Image *dst, *src;
+	Point c, sp;
+	int a, b, thick, alpha, phi;
+
+	dst   = checkimage(L, 1);
+	c     = checkpoint(L, 2);
+	a     = luaL_checkinteger(L, 3);
+	b     = luaL_checkinteger(L, 4);
+	src   = checkimage(L, 5);
+	sp    = checkpoint(L, 6);
+	alpha = luaL_checkinteger(L, 7);
+	phi   = luaL_checkinteger(L, 8);
+	fillarc(dst, c, a, b, src, sp, alpha, phi);
+	return 0;
+}
+
+static int
+licossin(lua_State *L)
+{
+	int deg, cosp, sinp;
+
+	deg = luaL_checkinteger(L, 1);
+	icossin(deg, &cosp, &sinp);
+	lua_pushinteger(L, cosp);
+	lua_pushinteger(L, sinp);
+	return 2;
+}
+
+static int
+licossin2(lua_State *L)
+{
+	int x, y, cosp, sinp;
+
+	x = luaL_checkinteger(L, 1);
+	y = luaL_checkinteger(L, 2);
+	icossin2(x, y, &cosp, &sinp);
+	lua_pushinteger(L, cosp);
+	lua_pushinteger(L, sinp);
+	return 2;
+}
+
+static int
+lborder(lua_State *L)
+{
+	Image *dst, *color;
+	Rectangle r;
+	Point sp;
+	int i;
+
+	dst   = checkimage(L, 1);
+	r     = checkrect(L, 2);
+	i     = luaL_checkinteger(L, 3);
+	color = checkimage(L, 4);
+	sp    = checkpoint(L, 5);
+	border(dst, r, i, color, sp);
 	return 0;
 }
 
@@ -165,14 +328,40 @@ lallocimage(lua_State *L)
 	return 1;
 }
 
+static int
+lallocimagemix(lua_State *L)
+{
+	Display *d;
+	ulong one, three;
+	Image *i;
+
+	d     = checkdisplay(L, 1);
+	one   = (ulong)luaL_checkinteger(L, 2);
+	three = (ulong)luaL_checkinteger(L, 3);
+	i     = allocimagemix(d, one, three);
+	pushimage(L, i);
+	return 1;
+}
+
 static const struct luaL_Reg libdraw [] = {
 	{ "init",        linitdraw },
 	{ "draw",        ldraw },
+	{ "replxy",      lreplxy },
+	{ "repl",        lrepl },
+	{ "replclipr",   lreplclipr },
 	{ "line",        lline },
+	{ "bezier",      lbezier },
+	{ "fillbezier",  lfillbezier },
 	{ "ellipse",     lellipse },
 	{ "fillellipse", lfillellipse },
+	{ "arc",         larc },
+	{ "fillarc",     lfillarc },
+	{ "icossin",     licossin },
+	{ "icossin2",    licossin2 },
+	{ "border",      lborder },
 	{ "string",      lstring },
 	{ "allocimage",  lallocimage },
+	{ "allocimagemix", lallocimagemix },
 	{ NULL, NULL }
 };
 
