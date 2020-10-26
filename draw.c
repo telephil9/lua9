@@ -391,7 +391,7 @@ lstringn(lua_State *L)
 	dst = checkimage(L, 1);
 	p   = checkpoint(L, 2);
 	src = checkimage(L, 3);
-	sp  = checkpoint(L, 4);
+	sp  = optpoint(L, 4);
 	f   = checkfont(L, 5);
 	s   = luaL_checkstring(L, 6);
 	len = luaL_checkinteger(L, 7);
@@ -433,7 +433,7 @@ lstringnbg(lua_State *L)
 	dst = checkimage(L, 1);
 	p   = checkpoint(L, 2);
 	src = checkimage(L, 3);
-	sp  = checkpoint(L, 4);
+	sp  = optpoint(L, 4);
 	f   = checkfont(L, 5);
 	s   = luaL_checkstring(L, 6);
 	len = luaL_checkinteger(L, 7);
