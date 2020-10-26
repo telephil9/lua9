@@ -38,6 +38,24 @@ function polys()
 	draw.fillpoly(screen, { p, p1, p2, p3, p4, p }, 3, display.black, ZP)
 end
 
+function beziers()
+	local p = g.addpt(screen.r.min, pt(10, 10))
+	draw.draw(screen, screen.r, display.white, nil, ZP)
+	draw.string(screen, p, display.black, nil, font, "draw.bezier(screen, p0, p1, p2, p3, draw.END_DISC, draw.END_DISC, 1, display.black, ZP)")
+	p = g.addpt(p, pt(0, 50))
+	p1 = g.addpt(p, pt(200, 100))
+	p2 = g.addpt(p, pt(50, 150))
+	p3 = g.addpt(p, pt(20, 75))
+	draw.bezier(screen, p, p1, p2, p3, draw.END_DISC, draw.END_DISC, 1, display.black, ZP)
+	p = g.addpt(p, pt(0, 150))
+	draw.string(screen, p, display.black, nil, font, "draw.fillbezier(screen, p0, p1, p2, p3, 5, display.black, ZP)")
+	p = g.addpt(p, pt(0, 50))
+	p1 = g.addpt(p, pt(100, 50))
+	p2 = g.addpt(p, pt(50, 150))
+	p3 = g.addpt(p, pt(200, 75))
+	draw.fillbezier(screen, p, p1, p2, p3, 5, display.black, ZP)
+end
+
 function strings()
 	local p = g.addpt(screen.r.min, pt(10, 10))
 	draw.draw(screen, screen.r, display.white, nil, ZP)
@@ -75,8 +93,8 @@ function colors()
 end
 
 local index = nil
-local menu = { "line", "poly", "string", "colors", "exit" }
-local demos = { lines, polys, strings, colors, os.exit }
+local menu = { "line", "poly", "bezier", "string", "colors", "exit" }
+local demos = { lines, polys, beziers, strings, colors, os.exit }
 
 function eresized()
 	if index then
