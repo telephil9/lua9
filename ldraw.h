@@ -29,6 +29,7 @@ Point* checkpoints(lua_State *L, int index, int *np);
 /* libs */
 int openlibdraw(lua_State *L);
 int openlibevent(lua_State *L);
+int openlibgeometry(lua_State *L);
 int openlibkey(lua_State *L);
 int openlibcolor(lua_State *L);
 

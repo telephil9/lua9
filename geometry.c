@@ -111,3 +111,145 @@ checkpoints(lua_State *L, int index, int *np)
 	}
 	return p;
 }
+
+static int
+lpt(lua_State *L)
+{
+	int x, y;
+
+	x = luaL_checkinteger(L, 1);
+	y = luaL_checkinteger(L, 2);
+	pushpoint(L, Pt(x, y));
+	return 1;
+}
+
+static int
+lrect(lua_State *L)
+{
+	int x0, x1, y0, y1;
+	
+	x0 = luaL_checkinteger(L, 1);
+	y0 = luaL_checkinteger(L, 2);
+	x1 = luaL_checkinteger(L, 3);
+	y1 = luaL_checkinteger(L, 4);
+	pushrect(L, Rect(x0, y0, x1, y1));
+	return 1;
+}
+
+static int
+laddpt(lua_State *L)
+{
+	Point p, q, r;
+
+	p = checkpoint(L, 1);
+	q = checkpoint(L, 2);
+	r = addpt(p, q);
+	pushpoint(L, r);
+	return 1;
+}
+
+static int
+lsubpt(lua_State *L)
+{
+	Point p, q, r;
+
+	p = checkpoint(L, 1);
+	q = checkpoint(L, 2);
+	r = subpt(p, q);
+	pushpoint(L, r);
+	return 1;
+}
+
+static int
+lmulpt(lua_State *L)
+{
+	Point p;
+	int a;
+
+	p = checkpoint(L, 1);
+	a = luaL_checkinteger(L, 2);
+	pushpoint(L, mulpt(p, a));
+	return 1;
+}
+
+static int
+ldivpt(lua_State *L)
+{
+	Point p;
+	int a;
+
+	p = checkpoint(L, 1);
+	a = luaL_checkinteger(L, 2);
+	pushpoint(L, divpt(p, a));
+	return 1;
+}
+
+static int
+lrectaddpt(lua_State *L)
+{
+	Rectangle r;
+	Point p;
+
+	r = checkrect(L, 1);
+	p = checkpoint(L, 2);
+	pushrect(L, rectaddpt(r, p));
+	return 1;
+}
+
+static int
+lrectsubpt(lua_State *L)
+{
+	Rectangle r;
+	Point p;
+
+	r = checkrect(L, 1);
+	p = checkpoint(L, 2);
+	pushrect(L, rectsubpt(r, p));
+	return 1;
+}
+
+static int
+linsetrect(lua_State *L)
+{
+	Rectangle r;
+	int n;
+
+	r = checkrect(L, 1);
+	n = luaL_checkinteger(L, 2);
+	pushrect(L, insetrect(r, n));
+	return 1;
+}
+
+static int
+lcanonrect(lua_State *L)
+{
+	Rectangle r;
+	
+	r = checkrect(L, 1);
+	pushrect(L, canonrect(r));
+	return 1;
+}
+
+static const struct luaL_Reg libgeometry [] = {
+	{ "pt", lpt },
+	{ "rect", lrect },
+	{ "addpt", laddpt },
+	{ "subpt", lsubpt },
+	{ "mulpt", lmulpt },
+	{ "divpt", ldivpt },
+	{ "rectaddpt", lrectaddpt },
+	{ "rectsubpt", lrectsubpt },
+	{ "insetrect", linsetrect },
+	{ "canonrect", lcanonrect },
+	{ NULL, NULL },
+};
+
+int
+openlibgeometry(lua_State *L)
+{
+	luaL_newlib(L, libgeometry);
+	pushpoint(L, ZP);
+	lua_setfield(L, -2, "ZP");
+	return 1;
+}
+

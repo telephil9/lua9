@@ -14,6 +14,7 @@
 static const luaL_Reg libs[] = {
 	{ "draw", openlibdraw },
 	{ "event", openlibevent },
+	{ "g", openlibgeometry },
 	{ "key",  openlibkey },
 	{ "color", openlibcolor },
 	{ NULL, NULL },
