@@ -139,7 +139,10 @@ lmenuhit(lua_State *L)
 	m = checkmouse(L, 2);
 	menu.item = checkstrings(L, 3);
 	r = emenuhit(b, &m, &menu);
-	lua_pushinteger(L, r);
+	if(r >= 0)
+		lua_pushinteger(L, r + 1);
+	else
+		lua_pushnil(L);
 	return 1;
 }
 
