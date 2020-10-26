@@ -1,4 +1,4 @@
-# About
+# Description
 
 lua9 is a custom version of the [lua](http://lua.org) interpreter including bindings to plan9 libdraw.  
 
@@ -22,15 +22,37 @@ Install lua9:
 % mk install
 ```
 
-# Running
+The binary is installed as `/bin/ape/lua9`.
 
-```sh
-% ape/lua9 <script.lua>
+# Usage
+
+Refer to the [documentation](https://github.com/telephil9/lua9/blob/master/doc/README.md) and to the [demo](https://github.com/telephil9/lua9/blob/master/demo.lua) script.
+
+Minimal example that simply paints the window black:
+```lua
+#!/bin/ape/lua9
+
+function eresized()
+  draw.draw(screen, screen.r, display.black, nil, g.ZP)
+end
+
+draw.init("sample")
+event.init(event.KEYBOARD)
+eresized()
+while true do
+  local e, ev = event.event()
+  if e == event.KEYBOARD then
+    if ev.kbdc == key.DEL then
+      os.exit()
+    end
+  end
+end
 ```
 
-You can also start your lua script with `#!/bin/ape/lua9` on the first line.
+# Credits
 
-# Documentation
+* [phil9](http://github.com/telephil9)
 
-TODO
+# License
 
+[MIT](https://github.com/telephil9/lua9/blob/master/LICENSE)
