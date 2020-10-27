@@ -147,6 +147,16 @@ lmenuhit(lua_State *L)
 }
 
 static int
+lmoveto(lua_State *L)
+{
+	Point p;
+
+	p = checkpoint(L, 1);
+	emoveto(p);
+	return 0;
+}
+
+static int
 lenter(lua_State *L)
 {
 	char buf[1024]; /* XXX do it better */
@@ -174,8 +184,9 @@ static const struct luaL_Reg libevent [] = {
 	{ "canmouse",  lcanmouse },
 	{ "cankbd",    lcankbd },
 	{ "timer",     ltimer },
-	{ "enter",     lenter },
 	{ "menuhit",   lmenuhit },
+	{ "moveto",    lmoveto },
+	{ "enter",     lenter },
 	{ NULL, NULL }
 };
 
