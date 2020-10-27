@@ -29,16 +29,6 @@ lopen(lua_State *L)
 }
 
 static int
-lclose(lua_State *L)
-{
-	int fd;
-
-	fd = luaL_checkinteger(L, 1);
-	//close(fd);
-	return 0;
-}
-
-static int
 lsendtext(lua_State *L)
 {
 	char *src, *dst, *wdir, *data;
@@ -81,7 +71,6 @@ lmsg(lua_State *L)
 
 static const struct luaL_Reg libplumb [] = {
 	{ "open", lopen },
-	{ "close", lclose },
 	{ "sendtext", lsendtext },
 	{ "recv", lrecv },
 	{ "msg", lmsg },
