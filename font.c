@@ -40,8 +40,17 @@ checkfont(lua_State *L, int index)
 static int
 font__gc(lua_State *L)
 {
-	/* TODO */
-	lua_pushboolean(L, 0);
+	LFont *l;
+
+	l = (LFont*)luaL_checkudata(L, 1, FONT);
+	luaL_argcheck(L, l != NULL, 1, "Font expected");
+	if(l->f == font){
+		lua_pushboolean(L, 0);
+		return 1;
+	}
+	freefont(l->f);
+	free(l);
+	lua_pushboolean(L, 1);
 	return 1;
 }
 
