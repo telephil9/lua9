@@ -1,4 +1,5 @@
 #include <u.h>
+#include <lib9.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -443,6 +444,48 @@ lstringnbg(lua_State *L)
 	pushpoint(L, rp);
 	return 1;
 }
+
+static int
+lopenfont(lua_State *L)
+{
+	Display *d;
+	Font *f;
+	char *n;
+	char err[128];
+
+	d = checkdisplay(L, 1);
+	n = luaL_checkstring(L, 2);
+	f = openfont(d, n);
+	if(f == nil){
+		errstr(err, sizeof err);
+		lua_pushfstring(L, "cannot open font '%s': %s", n, err);
+		return lua_error(L);
+	}
+	pushfont(L, f);
+	return 1;
+}
+
+static int
+lbuildfont(lua_State *L)
+{
+	Display *d;
+	Font *f;
+	char *n, *m;
+	char err[128];
+
+	d = checkdisplay(L, 1);
+	n = luaL_checkstring(L, 2);
+	m = luaL_checkstring(L, 3);
+	f = buildfont(d, n, m);
+	if(f == nil){
+		errstr(err, sizeof err);
+		lua_pushfstring(L, "cannot build font '%s': %s", n, err);
+		return lua_error(L);
+	}
+	pushfont(L, f);
+	return 1;
+}
+
 	
 static int
 lallocimage(lua_State *L)
@@ -502,6 +545,8 @@ static const struct luaL_Reg libdraw [] = {
 	{ "stringn",     lstringn },
 	{ "stringbg",    lstringbg },
 	{ "stringnbg",   lstringnbg },
+	{ "openfont",    lopenfont },
+	{ "buildfont",   lbuildfont },
 	{ "allocimage",  lallocimage },
 	{ "allocimagemix", lallocimagemix },
 	{ NULL, NULL }
