@@ -14,6 +14,9 @@ OFILES=\
 	event.$O \
 	key.$O \
 	color.$O \
+	plumb.$O \
+	plumbmsg.$O \
+	plumbattr.$O \
 	utils.$O \
 	lua9.$O
 

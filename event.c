@@ -5,6 +5,7 @@
 #include <draw.h>
 #include <event.h>
 #include <keyboard.h>
+#include <plumb.h>
 #include <lua.h>
 #include <lauxlib.h>
 #include <lualib.h>
@@ -60,6 +61,8 @@ levent(lua_State *L)
 	lua_pushinteger(L, ev.mouse.msec);
 	lua_setfield(L, -2, "msec");
 	lua_setfield(L, -2, "mouse");
+	lua_pushlightuserdata(L, ev.v);
+	lua_setfield(L, -2, "v");
 	return 2;
 }
 
@@ -175,7 +178,21 @@ lenter(lua_State *L)
 	else
 		lua_pushnil(L);
 	return 1;
-}	
+}
+
+static int
+lplumb(lua_State *L)
+{
+	int key, ret;
+	char *port;
+
+	key  = luaL_checkinteger(L, 1);
+	port = luaL_checkstring(L, 2);
+	ret  = eplumb(key, port);
+	lua_pushinteger(L, ret);
+	return 1;
+}
+
 
 static const struct luaL_Reg libevent [] = {
 	{ "init",      leinit },
@@ -187,6 +204,7 @@ static const struct luaL_Reg libevent [] = {
 	{ "menuhit",   lmenuhit },
 	{ "moveto",    lmoveto },
 	{ "enter",     lenter },
+	{ "plumb",     lplumb },
 	{ NULL, NULL }
 };
 

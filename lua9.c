@@ -5,10 +5,12 @@
 #include <draw.h>
 #include <event.h>
 #include <keyboard.h>
+#include <plumb.h>
 #include <lua.h>
 #include <lauxlib.h>
 #include <lualib.h>
 #include "ldraw.h"
+#include "lplumb.h"
 #include "utils.h"
 
 static const luaL_Reg libs[] = {
@@ -17,6 +19,7 @@ static const luaL_Reg libs[] = {
 	{ "g", openlibgeometry },
 	{ "key",  openlibkey },
 	{ "color", openlibcolor },
+	{ "plumb", openlibplumb },
 	{ NULL, NULL },
 };
 
