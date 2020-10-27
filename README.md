@@ -26,7 +26,7 @@ The binary is installed as `/bin/ape/lua9`.
 
 # Usage
 
-Refer to the [documentation](https://github.com/telephil9/lua9/blob/master/doc/README.md) and to the [demo](https://github.com/telephil9/lua9/blob/master/demo.lua) script.
+Refer to the [documentation](https://github.com/telephil9/lua9/blob/master/doc/README.md) and to the [samples](https://github.com/telephil9/lua9/tree/master/samples). Most notably look at the [demo](https://github.com/telephil9/lua9/blob/master/samples/demo.lua) script.
 
 Minimal example that simply paints the window black:
 ```lua
