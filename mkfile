@@ -17,6 +17,7 @@ OFILES=\
 	plumb.$O \
 	plumbmsg.$O \
 	plumbattr.$O \
+	lib9.$O \
 	utils.$O \
 	lua9.$O
 

@@ -11,6 +11,7 @@
 #include <lualib.h>
 #include "ldraw.h"
 #include "lplumb.h"
+#include "llib9.h"
 #include "utils.h"
 
 static const luaL_Reg libs[] = {
@@ -20,6 +21,7 @@ static const luaL_Reg libs[] = {
 	{ "key",  openlibkey },
 	{ "color", openlibcolor },
 	{ "plumb", openlibplumb },
+	{ "plan9", openlib9 },
 	{ NULL, NULL },
 };
 
