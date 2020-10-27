@@ -56,6 +56,48 @@ function beziers()
 	draw.fillbezier(screen, p, p1, p2, p3, 5, display.black, ZP)
 end
 
+function bezsplines()
+	local p = g.addpt(screen.r.min, pt(10, 10))
+	draw.draw(screen, screen.r, display.white, nil, ZP)
+	draw.string(screen, p, display.black, nil, font, "draw.bezspline(screen, { p0, p1, p2, p0 }, draw.END_SQUARE, draw.END_SQUARE, 3, display.black, ZP)")
+	p = g.addpt(p, pt(0, 0))
+	p1 = g.addpt(p, pt(200, 200))
+	p2 = g.addpt(p, pt(0, 200))
+	draw.bezspline(screen, { p, p1, p2, p }, draw.END_SQUARE, draw.END_SQUARE, 3, display.black, ZP)
+	p = g.addpt(p, pt(0, 250))
+	draw.string(screen, p, display.black, nil, font, "draw.fillbezspline(screen, { p0, p1, p2, p3, p4, p0 }, 3, display.black, ZP)")
+	p = g.addpt(p, pt(50, 50))
+	p1 = g.addpt(p, pt(200, 100))
+	p2 = g.addpt(p, pt(100, 150))
+	p3 = g.addpt(p, pt(50, 200))
+	p4 = g.addpt(p, pt(-50, 50))
+	draw.fillbezspline(screen, { p, p1, p2, p3, p4, p }, 3, display.black, ZP)
+end
+
+function ellipses()
+	local p = g.addpt(screen.r.min, pt(10, 10))
+	draw.draw(screen, screen.r, display.white, nil, ZP)
+	draw.string(screen, p, display.black, nil, font, "draw.ellipse(screen, p, 200, 50, 2, display.black, ZP)")
+	p1 = g.addpt(p, pt(200, 100))
+	draw.ellipse(screen, p1, 200, 50, 2, display.black, ZP)
+	p = g.addpt(p, pt(0, 200))
+	draw.string(screen, p, display.black, nil, font, "draw.fillellipse(screen, p, 50, 50, display.black, ZP)")
+	p1 = g.addpt(p, pt(50, 100))
+	draw.fillellipse(screen, p1, 50, 50, display.black, ZP)
+end
+
+function arcs()
+	local p = g.addpt(screen.r.min, pt(10, 10))
+	draw.draw(screen, screen.r, display.white, nil, ZP)
+	draw.string(screen, p, display.black, nil, font, "draw.arc(screen, p, 200, 50, 2, display.black, ZP, 30, 260)")
+	p1 = g.addpt(p, pt(200, 100))
+	draw.arc(screen, p1, 200, 50, 2, display.black, ZP, 30, 260)
+	p = g.addpt(p, pt(0, 200))
+	draw.string(screen, p, display.black, nil, font, "draw.fillarc(screen, p, 50, 50, display.black, ZP, 10, 145)")
+	p1 = g.addpt(p, pt(50, 100))
+	draw.fillarc(screen, p1, 50, 50, display.black, ZP, 10, 145)
+end
+
 function strings()
 	local p = g.addpt(screen.r.min, pt(10, 10))
 	draw.draw(screen, screen.r, display.white, nil, ZP)
@@ -93,8 +135,8 @@ function colors()
 end
 
 local index = nil
-local menu = { "line", "poly", "bezier", "string", "colors", "exit" }
-local demos = { lines, polys, beziers, strings, colors, os.exit }
+local menu = { "line", "poly", "bezier", "bezspline", "ellipse", "arc", "string", "colors", "exit" }
+local demos = { lines, polys, beziers, bezsplines, ellipses, arcs, strings, colors, os.exit }
 
 function eresized()
 	if index then
