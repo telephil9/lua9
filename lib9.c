@@ -1,5 +1,6 @@
 #include <u.h>
 #include <lib9.h>
+#include <unistd.h>
 #include <lua.h>
 #include <lauxlib.h>
 #include <lualib.h>
@@ -26,9 +27,18 @@ lfork(lua_State *L)
 	return 0;
 }
 
+static int
+lclose(lua_State *L)
+{
+	int fd;
 
+	fd = luaL_checkinteger(L, 1);
+	close(fd);
+	return 0;
+}
 static const struct luaL_Reg lib9 [] = {
 	{ "fork", lfork },
+	{ "close", lclose },
 	{ NULL, NULL }
 };
 
