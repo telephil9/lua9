@@ -82,6 +82,7 @@ Geometry related functions.
 
 #### `g.pt(x, y)`
 #### `g.rect(x0, y0, x1, y1)`
+#### `g.rpt(p, q)`
 #### `g.addpt(p, q)`
 #### `g.subpt(p, q)`
 #### `g.mulpt(p, a)`
@@ -90,7 +91,14 @@ Geometry related functions.
 #### `g.rectsubpt(r, p)`
 #### `g.insetrect(r, n)`
 #### `g.canonrect(r)`
-
+#### `g.eqpt(p, q)`
+#### `g.eqrect(r, s)`
+#### `g.ptinrect(p, r)`
+#### `g.rectinrect(r, s)`
+#### `g.rectxrect(r, s)`
+#### `g.badrect(r)`
+#### `g.dx(r)`
+#### `g.dy(r)`
 
 ### Module `key`
 

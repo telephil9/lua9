@@ -137,6 +137,17 @@ lrect(lua_State *L)
 }
 
 static int
+lrpt(lua_State *L)
+{
+	Point p, q;
+
+	p = checkpoint(L, 1);
+	q = checkpoint(L, 2);
+	pushrect(L, Rpt(p, q));
+	return 1;
+}
+
+static int
 laddpt(lua_State *L)
 {
 	Point p, q, r;
@@ -230,9 +241,96 @@ lcanonrect(lua_State *L)
 	return 1;
 }
 
+static int
+leqpt(lua_State *L)
+{
+	Point p, q;
+
+	p = checkpoint(L, 1);
+	q = checkpoint(L, 2);
+	lua_pushboolean(L, eqpt(p, q));
+	return 1;
+}
+
+static int
+leqrect(lua_State *L)
+{
+	Rectangle r, s;
+
+	r = checkrect(L, 1);
+	s = checkrect(L, 2);
+	lua_pushboolean(L, eqrect(r, s));
+	return 1;
+}
+
+static int
+lptinrect(lua_State *L)
+{
+	Point p;
+	Rectangle r;
+
+	p = checkpoint(L, 1);
+	r = checkrect(L, 2);
+	lua_pushboolean(L, ptinrect(p, r));
+	return 1;
+}
+
+static int
+lrectinrect(lua_State *L)
+{
+	Rectangle r, s;
+
+	r = checkrect(L, 1);
+	s = checkrect(L, 2);
+	lua_pushboolean(L, rectinrect(r, s));
+	return 1;
+}
+
+static int
+lrectxrect(lua_State *L)
+{
+	Rectangle r, s;
+
+	r = checkrect(L, 1);
+	s = checkrect(L, 2);
+	lua_pushboolean(L, rectXrect(r, s));
+	return 1;
+}
+
+static int
+lbadrect(lua_State *L)
+{
+	Rectangle r;
+
+	r = checkrect(L, 1);
+	lua_pushboolean(L, badrect(r));
+	return 1;
+}
+
+static int
+ldx(lua_State *L)
+{
+	Rectangle r;
+
+	r = checkrect(L, 1);
+	lua_pushinteger(L, Dx(r));
+	return 1;
+}
+
+static int
+ldy(lua_State *L)
+{
+	Rectangle r;
+
+	r = checkrect(L, 1);
+	lua_pushinteger(L, Dy(r));
+	return 1;
+}
+
 static const struct luaL_Reg libgeometry [] = {
 	{ "pt", lpt },
 	{ "rect", lrect },
+	{ "rpt", lrpt },
 	{ "addpt", laddpt },
 	{ "subpt", lsubpt },
 	{ "mulpt", lmulpt },
@@ -241,6 +339,14 @@ static const struct luaL_Reg libgeometry [] = {
 	{ "rectsubpt", lrectsubpt },
 	{ "insetrect", linsetrect },
 	{ "canonrect", lcanonrect },
+	{ "eqpt", leqpt },
+	{ "eqrect", leqrect },
+	{ "ptinrect", lptinrect },
+	{ "rectinrect", lrectinrect },
+	{ "rectxrect", lrectxrect },
+	{ "badrect", lbadrect },
+	{ "dx", ldx },
+	{ "dy", ldy },
 	{ NULL, NULL },
 };
 
