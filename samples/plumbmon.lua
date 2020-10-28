@@ -7,17 +7,15 @@ function log_message(port, data)
 	print(s)
 end
 
-function make_listener(port)
-	return function()
-			fd = plumb.open(port, plan9.OREAD)
-			while true do
-				local m = plumb.recv(fd)
-				log_message(port, m.data)
-			end
-		end
+function listen(port)
+	fd = plumb.open(port, plan9.OREAD)
+	while true do
+		local m = plumb.recv(fd)
+		log_message(port, m.data)
+	end
 end
 
 local ports = { "edit", "web", "image", "seemail" }
 for k,v in ipairs(ports) do
-	plan9.fork(make_listener(v))
+	plan9.fork(listen, v)
 end

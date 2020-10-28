@@ -11,6 +11,7 @@ static int
 lfork(lua_State *L)
 {
 	char err[128];
+	int n;
 
 	if(lua_isfunction(L, 1) == 0)
 		return luaL_argerror(L, 1, "expected a function");
@@ -22,7 +23,8 @@ lfork(lua_State *L)
 	case 0:
 		break;
 	default:
-		lua_call(L, 0, 0);
+		n = lua_gettop(L);
+		lua_call(L, n - 1, 0);
 	}
 	return 0;
 }
