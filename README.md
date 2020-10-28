@@ -1,6 +1,10 @@
 # Description
 
-lua9 is a custom version of the [lua](http://lua.org) interpreter including bindings to plan9 libdraw.  
+lua9 is a custom version of the [lua](http://lua.org) interpreter including bindings to some plan9 libraries.
+The supported libraries are:
+* libdraw
+* libplumb
+* lib9 (very partial support)  
 
 __Disclaimer:__ This is work in progress and is sure to contain bugs.
 
