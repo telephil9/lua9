@@ -486,7 +486,49 @@ lbuildfont(lua_State *L)
 	return 1;
 }
 
-	
+static int
+lstringsize(lua_State *L)
+{
+	Font *f;
+	char *s;
+	Point p;
+
+	f = checkfont(L, 1);
+	s = luaL_checkstring(L, 2);
+	p = stringsize(f, s);
+	pushpoint(L, p);
+	return 1;
+}
+
+static int
+lstringwidth(lua_State *L)
+{
+	Font *f;
+	char *s;
+	int w;
+
+	f = checkfont(L, 1);
+	s = luaL_checkstring(L, 2);
+	w = stringwidth(f, s);
+	lua_pushinteger(L, w);
+	return 1;
+}
+
+static int
+lstringnwidth(lua_State *L)
+{
+	Font *f;
+	char *s;
+	int n, w;
+
+	f = checkfont(L, 1);
+	s = luaL_checkstring(L, 2);
+	n = luaL_checkinteger(L, 3);
+	w = stringnwidth(f, s, n);
+	lua_pushinteger(L, w);
+	return 1;
+}
+
 static int
 lallocimage(lua_State *L)
 {
@@ -547,6 +589,9 @@ static const struct luaL_Reg libdraw [] = {
 	{ "stringnbg",   lstringnbg },
 	{ "openfont",    lopenfont },
 	{ "buildfont",   lbuildfont },
+	{ "stringsize",  lstringsize },
+	{ "stringwidth", lstringwidth },
+	{ "stringnwidth", lstringnwidth },
 	{ "allocimage",  lallocimage },
 	{ "allocimagemix", lallocimagemix },
 	{ NULL, NULL }
