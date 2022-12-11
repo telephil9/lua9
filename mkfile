@@ -1,7 +1,7 @@
 </$objtype/mkfile
 
 TARG=lua9
-BIN=/$objtype/bin/
+BIN=/$objtype/bin
 LIB=lua/liblua.a.$O
 OFILES=\
 	display.$O \
@@ -27,8 +27,6 @@ CFLAGS=-FTVw -p -Ilua/shim -Ilua -DLUA_USE_PLAN9
 
 $LIB:V:
 	@{cd lua; mk}
-
-install:V: man
 
 pull:V:
 	@{if(test -d lua){cd lua; git/pull}
