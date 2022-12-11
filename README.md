@@ -10,23 +10,16 @@ __Disclaimer:__ This is work in progress and is sure to contain bugs.
 
 # Installation
 
-Make sure to have [git9](http://github.com/oridb/git9) installed first.
+lua9 uses kvik's lu9 native port of lua.
 
-Install the [lua 5.4 port](https://github.com/staalmannen/lua) for plan9 by [staalmannen](https://github.com/staalmannen).  
-```sh
-% git/clone git://github.com/staalmannen/lua
-% cd lua
-% mk install
-```
-
-Install lua9:  
 ```sh
 % git/clone git://github.com/telephil9/lua9
 % cd lua9
+% mk pull
 % mk install
 ```
 
-The binary is installed as `/bin/ape/lua9`.
+The binary is installed as `/bin/lua9`.
 
 # Usage
 
@@ -34,7 +27,7 @@ Refer to the [documentation](https://github.com/telephil9/lua9/blob/master/doc/R
 
 Minimal example that simply paints the window black:
 ```lua
-#!/bin/ape/lua9
+#!/bin/lua9
 
 function eresized()
   draw.draw(screen, screen.r, display.black, nil, g.ZP)
