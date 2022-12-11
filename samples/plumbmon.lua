@@ -1,4 +1,4 @@
-#!/bin/ape/lua9
+#!/bin/lua9
 
 -- lua rewrite of plumbmon by sirjofri (see http://github.com/sirjofri/plumbmon)
 

@@ -1,11 +1,4 @@
-#include <draw.h>
-#include <stdlib.h>
-#include <string.h>
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
-#include "ldraw.h"
-#include "utils.h"
+#include "a.h"
 
 #define IMAGE "Image"
 
@@ -63,7 +56,6 @@ static int
 image__tostring(lua_State *L)
 {
 	void *p;
-	char buf[64];
 
 	p = lua_touserdata(L, 1);
 	lua_pushfstring(L, "image: %p", p);

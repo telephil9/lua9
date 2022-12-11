@@ -1,11 +1,4 @@
-#include <u.h>
-#include <lib9.h>
-#include <unistd.h>
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-#include "llib9.h"
-#include "utils.h"
+#include "a.h"
 
 static int
 lfork(lua_State *L)

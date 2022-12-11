@@ -1,8 +1,4 @@
-#include <keyboard.h>
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-#include "utils.h"
+#include "a.h"
 
 static int
 lkeyeq(lua_State *L)

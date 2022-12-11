@@ -1,6 +1,4 @@
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
+#include "a.h"
 
 /* push a global definition in the lib on the stack */
 void

@@ -1,8 +1,4 @@
-#include <draw.h>
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-#include "utils.h"
+#include "a.h"
 
 static const struct luaL_Reg libcolor[] = {
 	{ NULL, NULL },

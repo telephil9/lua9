@@ -1,16 +1,4 @@
-#include <u.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <draw.h>
-#include <event.h>
-#include <keyboard.h>
-#include <plumb.h>
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-#include "ldraw.h"
-#include "utils.h"
+#include "a.h"
 
 static Mouse
 checkmouse(lua_State *L, int index)
@@ -126,7 +114,7 @@ checkstrings(lua_State *L, int index)
 	items[n] = NULL;
 	for(i = 0; i < n; i++){
 		lua_rawgeti(L, index, i + 1);
-		items[i] = luaL_checkstring(L, lua_gettop(L));
+		items[i] = (char*)luaL_checkstring(L, lua_gettop(L));
 	}
 	return items;
 }
@@ -163,7 +151,7 @@ static int
 lenter(lua_State *L)
 {
 	char buf[1024]; /* XXX do it better */
-	char *ask, *s;
+	const char *ask, *s;
 	Mouse m;
 	int n;
 
@@ -184,7 +172,7 @@ static int
 lplumb(lua_State *L)
 {
 	int key, ret;
-	char *port;
+	const char *port;
 
 	key  = luaL_checkinteger(L, 1);
 	port = luaL_checkstring(L, 2);

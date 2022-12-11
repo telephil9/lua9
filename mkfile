@@ -1,10 +1,8 @@
-APE=/sys/src/ape
-<$APE/config
+</$objtype/mkfile
 
 TARG=lua9
-
-BIN=/$objtype/bin/ape
-
+BIN=/$objtype/bin/
+LIB=lua/liblua.a.$O
 OFILES=\
 	display.$O \
 	font.$O \
@@ -20,23 +18,22 @@ OFILES=\
 	lib9.$O \
 	utils.$O \
 	lua9.$O
+HFILES=a.h
 
-HFILES=\
-	ldraw.h \
-	utils.h
 
 </sys/src/cmd/mkone
 
-CC=pcc
-LD=pcc
-CFLAGS= -c -I. -D_C99_SNPRINTF_EXTENSION -D_PLAN9_SOURCE -D_POSIX_SOURCE \
-        -D_SUSV2_SOURCE -DLUA_POSIX -DENABLE_CJSON_GLOBAL \
-        -DPlan9 -DMAKE_LUA
+CFLAGS=-FTVw -p -Ilua/shim -Ilua -DLUA_USE_PLAN9
 
-install:V:
-        cp $O.out /$objtype/bin/ape/$TARG
-        
-nuke:V:
-        rm -f /$objtype/bin/ape/$TARG
-        
+$LIB:V:
+	@{cd lua; mk}
 
+install:V: man
+
+pull:V:
+	@{if(test -d lua){cd lua; git/pull}
+	  if not git/clone https://git.sr.ht/~kvik/lu9-lua lua}
+	
+clean nuke:V:
+	@{ cd lua; mk $target }
+	rm -f *.[$OS] [$OS].out $TARG

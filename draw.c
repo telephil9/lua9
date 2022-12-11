@@ -1,16 +1,4 @@
-#include <u.h>
-#include <lib9.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <draw.h>
-#include <event.h>
-#include <keyboard.h>
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-#include "ldraw.h"
-#include "utils.h"
+#include "a.h"
 
 static lua_State *state;
 static int ridx, tidx;
@@ -305,7 +293,7 @@ lfillarc(lua_State *L)
 {
 	Image *dst, *src;
 	Point c, sp;
-	int a, b, thick, alpha, phi;
+	int a, b, alpha, phi;
 
 	dst   = checkimage(L, 1);
 	c     = checkpoint(L, 2);
@@ -386,7 +374,7 @@ lstringn(lua_State *L)
 	Image *dst, *src;
 	Point p, sp, rp;
 	Font *f;
-	char *s;
+	const char *s;
 	int len;
 
 	dst = checkimage(L, 1);
@@ -428,7 +416,7 @@ lstringnbg(lua_State *L)
 	Image *dst, *src, *bg;
 	Point p, sp, bgp, rp;
 	Font *f;
-	char *s;
+	const char *s;
 	int len;
 
 	dst = checkimage(L, 1);
@@ -450,7 +438,7 @@ lopenfont(lua_State *L)
 {
 	Display *d;
 	Font *f;
-	char *n;
+	const char *n;
 	char err[128];
 
 	d = checkdisplay(L, 1);
@@ -470,7 +458,7 @@ lbuildfont(lua_State *L)
 {
 	Display *d;
 	Font *f;
-	char *n, *m;
+	const char *n, *m;
 	char err[128];
 
 	d = checkdisplay(L, 1);
@@ -490,7 +478,7 @@ static int
 lstringsize(lua_State *L)
 {
 	Font *f;
-	char *s;
+	const char *s;
 	Point p;
 
 	f = checkfont(L, 1);
@@ -504,7 +492,7 @@ static int
 lstringwidth(lua_State *L)
 {
 	Font *f;
-	char *s;
+	const char *s;
 	int w;
 
 	f = checkfont(L, 1);
@@ -518,7 +506,7 @@ static int
 lstringnwidth(lua_State *L)
 {
 	Font *f;
-	char *s;
+	const char *s;
 	int n, w;
 
 	f = checkfont(L, 1);
@@ -563,6 +551,35 @@ lallocimagemix(lua_State *L)
 	return 1;
 }
 
+static int
+lreadimage(lua_State *L)
+{
+	Display *d;
+	const char *f;
+	int fd;
+	Image *i;
+	char err[128];
+
+	d = checkdisplay(L, 1);
+	f = luaL_checkstring(L, 2);
+	fd = open(f, 0);
+	if(fd<0){
+		errstr(err, sizeof err);
+		lua_pushfstring(L, "cannot open file '%s': %s", f, err);
+		return lua_error(L);
+	}
+	i = readimage(d, fd, 0);
+	if(i==nil){
+		close(fd);
+		errstr(err, sizeof err);
+		lua_pushfstring(L, "cannot read image: %s", err);
+		return lua_error(L);
+	}
+	close(fd);
+	pushimage(L, i);
+	return 1;
+}
+
 static const struct luaL_Reg libdraw [] = {
 	{ "init",        linitdraw },
 	{ "draw",        ldraw },
@@ -594,6 +611,7 @@ static const struct luaL_Reg libdraw [] = {
 	{ "stringnwidth", lstringnwidth },
 	{ "allocimage",  lallocimage },
 	{ "allocimagemix", lallocimagemix },
+	{ "readimage", lreadimage },
 	{ NULL, NULL }
 };
 

@@ -1,8 +1,4 @@
-#include <draw.h>
-#include <stdlib.h>
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
+#include "a.h"
 
 void
 pushrect(lua_State *L, Rectangle r)

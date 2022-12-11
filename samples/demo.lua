@@ -1,4 +1,4 @@
-#!/bin/ape/lua9
+#!/bin/lua9
 
 local pt = g.pt
 local rect = g.rect

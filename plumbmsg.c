@@ -1,11 +1,4 @@
-#include <plumb.h>
-#include <stdlib.h>
-#include <string.h>
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-#include "lplumb.h"
-#include "utils.h"
+#include "a.h"
 
 #define PLUMBMSG "Plumbmsg"
 

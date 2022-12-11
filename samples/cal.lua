@@ -1,4 +1,4 @@
-#!/bin/ape/lua9
+#!/bin/lua9
 
 local pt = g.pt
 local ZP = g.ZP
@@ -50,7 +50,7 @@ function eresized()
 	local p = g.addpt(screen.r.min, pt(10, 10))
 	local x = p.x
 	draw.draw(screen, screen.r, display.white, nil, ZP)
-	p = pt(x + (barw - draw.stringwidth(font, header)) / 2, p.y)
+	p = pt(math.floor(x + (barw - draw.stringwidth(font, header)) / 2), p.y)
 	dprint(p, header)
 	p = pt(x, p.y + font.height + 5)
 	dprint(p, bar)

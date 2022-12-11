@@ -1,18 +1,9 @@
-#include <u.h>
-#include <lib9.h>
-#include <plumb.h>
-#include <stdlib.h>
-#include <string.h>
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-#include "lplumb.h"
-#include "utils.h"
+#include "a.h"
 
 static int
 lopen(lua_State *L)
 {
-	char *port;
+	const char *port;
 	int omode, fd;
 	char err[128];
 
@@ -31,7 +22,7 @@ lopen(lua_State *L)
 static int
 lsendtext(lua_State *L)
 {
-	char *src, *dst, *wdir, *data;
+	const char *src, *dst, *wdir, *data;
 	int fd, n;
 
 	fd   = luaL_checkinteger(L, 1);

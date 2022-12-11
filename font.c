@@ -1,11 +1,4 @@
-#include <draw.h>
-#include <stdlib.h>
-#include <string.h>
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-#include "ldraw.h"
-#include "utils.h"
+#include "a.h"
 
 #define FONT "Font"
 

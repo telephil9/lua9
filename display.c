@@ -1,11 +1,4 @@
-#include <draw.h>
-#include <stdlib.h>
-#include <string.h>
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
-#include "ldraw.h"
-#include "utils.h"
+#include "a.h"
 
 #define DISPLAY "Display"
 

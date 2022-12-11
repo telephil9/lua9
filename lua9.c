@@ -1,18 +1,4 @@
-#include <u.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <draw.h>
-#include <event.h>
-#include <keyboard.h>
-#include <plumb.h>
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-#include "ldraw.h"
-#include "lplumb.h"
-#include "llib9.h"
-#include "utils.h"
+#include "a.h"
 
 static const luaL_Reg libs[] = {
 	{ "draw", openlibdraw },
@@ -45,8 +31,8 @@ int
 main(int argc, char *argv[])
 {
 	lua_State *L;
-	luaL_Reg *lib;
-	char *s;
+	const luaL_Reg *lib;
+	const char *s;
 	int r;
 
 	L = luaL_newstate();
